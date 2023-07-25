@@ -1,0 +1,55 @@
+.ata-settings-wrapper {
+    max-width: 800px;
+    margin-top: 50px;
+}
+
+.ata-settings-heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.ata-settings-tab {
+    display: none;
+}
+
+.ata-settings-tab.active {
+    display: block;
+}
+
+.ata-settings-tabs {
+    margin-bottom: 20px;
+}
+
+.ata-settings-tabs ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ata-settings-tabs li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.ata-settings-tabs li a {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.ata-settings-tabs li a.active {
+    background-color: #ffffff;
+}
+
+.ata-settings-editor {
+    width: 100%;
+    height: 400px;
+    font-family: monospace;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    box-sizing: border-box;
+}
