@@ -1,72 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function getCookieValue() {
-    var cookies = document.cookie.split(";"); // Split all cookies into an array
-
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i].trim();
-
-      if (cookie.indexOf("_sp_id") === 0) {
-        var value = cookie.substring(cookie.indexOf("=") + 1); // Extract the value part of the cookie
-        value = value.replace(/-/g, ""); // Remove dashes from the value
-        return value.substring(0, 32); // Truncate the value to the first 32 characters
-      }
-    }
-
-    return null; // Return null if the cookie is not found
-  }
-
-  var cookieValue = getCookieValue();
-  if (cookieValue) {
-    localStorage.setItem("User ID:", cookieValue);
-    console.log("Cookie value stored in local storage as 'User ID:'");
-  } else {
-    console.log("Cookie not found or value is null");
-  }
-  var user_id = localStorage.getItem("User ID:");
-
 
   function get_group_for_user() {
-    const api_url = 'https://ata-api.localnewslab.io/prescription/the-19th/' + user_id;
-    const the19th = decrypted.the19th;
+    const groupID = localStorage.getItem("group");
+    document.body.id = "group-" + groupID.toLowerCase();
 
-    const headers = {
-     'x-api-key': the19th,
-    };
-    return fetch(api_url, { headers })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('API request failed');
-        }
-      })
-      .then(data => {
-            const site_name = data.site_name;
-            const user_id = data.user_id;
-            const group = data.group;
-            console.log("Site Name:", site_name);
-            console.log("User ID:", user_id);
-            console.log("Group:", group);
-            localStorage.setItem("group", group); // Set group in local storage
-            const groupID = group;
-            document.body.id = "group-" + groupID.toLowerCase();
-            return { user_id, group }; // Return an object with user_id and group
-      })
-      .catch(error => {
-        console.error(error);
-        return { user_id: null, group: 'B' }; // Return default values if API request fails
-      });
-  }
-
-  get_group_for_user().then(({ user_id, group }) => {
     if (localStorage.getItem("modalDisabled") === "disabled") {
       var body = document.querySelector("body");
       body.classList.add("newsletter-disabled");
     }
+
+    // Define group
+    const group = groupID;
+
     if (group === "A" && localStorage.getItem("modalDisabled") !== "disabled") {
       var modalShown = localStorage.setItem("modalShown", "true");
       displayModal();
     }
+
     if (group === "B" && localStorage.getItem("modalDisabled") !== "disabled") {
       function getScrollDepth() {
         var scrollHeight = document.documentElement.scrollHeight;
@@ -101,7 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (localStorage.getItem("modalDisabled") === "disabled") {
       console.log("disabled");
     }
-  });
+}
+get_group_for_user();
+
 
   function displayModal() {
     var modalContent = document.createElement("div");
