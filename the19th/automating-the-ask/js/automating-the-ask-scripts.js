@@ -53,8 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 }
 get_group_for_user();
-
-
   function displayModal() {
     var modalContent = document.createElement("div");
     modalContent.className = "newsletter";

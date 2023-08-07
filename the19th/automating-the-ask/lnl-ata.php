@@ -10,12 +10,12 @@ function fetch_group() {
     // Sanitize and verify nonce
     $nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
     if (!wp_verify_nonce($nonce, 'fetch_group_nonce')) {
-        echo json_encode(['error' => 'Invalid nonce value']);
+        echo wp_json_encode(['error' => 'Invalid nonce value']);
         wp_die();
     }
 
     if (!isset($_POST['userId'])) {
-        echo json_encode(['error' => 'No user ID set']);
+        echo wp_json_encode(['error' => 'No user ID set']);
         wp_die();
     }
 
@@ -25,13 +25,13 @@ function fetch_group() {
         'x-api-key' => LNL_ATA_API_KEY
     ];
 
-    $response = wp_remote_get($url, ['headers' => $headers]);
+    $response = vip_safe_wp_remote_get($url, ['headers' => $headers]);
 
-    if (is_wp_error($response)) {
-        echo json_encode(['error' => $response->get_error_message()]);
-    } else {
-        echo $response['body'];
-    }
+	if (is_wp_error($response)) {
+    		wp_send_json_error(['error' => $response->get_error_message()]);
+	} else {
+    		wp_send_json($response['body']);
+	}
 
     wp_die();
 }

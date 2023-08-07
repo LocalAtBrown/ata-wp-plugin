@@ -1,0 +1,15 @@
+{
+    "name": "tchadblair/ata-wp-plugin",
+    "autoload": {
+        "psr-4": {
+            "Tchadblair\\AtaWpPlugin\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "pelenupe",
+            "email": "tchadb@gmail.com"
+        }
+    ],
+    "require": {}
+}
