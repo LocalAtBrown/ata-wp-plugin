@@ -38,23 +38,6 @@ function fetch_group() {
 add_action('wp_ajax_fetch_group', 'fetch_group');
 add_action('wp_ajax_nopriv_fetch_group', 'fetch_group');
 
-function enqueue_group_fetcher_script() {
-    wp_enqueue_script(
-        'group-fetcher-js', 
-        plugin_dir_url(__FILE__) . '/js/group-fetcher.js', 
-        ['jquery'], 
-        '1.0.0', 
-        true 
-    );
-
-    // Localize script with data for JavaScript
-    wp_localize_script('group-fetcher-js', 'groupFetcherData', [
-        'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('fetch_group_nonce'), // create and add nonce here
-    ]);
-}
-add_action('wp_enqueue_scripts', 'enqueue_group_fetcher_script');
-
 function enqueue_scripts() {
     wp_enqueue_script('my-script', get_template_directory_uri() . '/js/script.js', array(), '1.0.0', true);
     wp_localize_script('my-script', 'myData', array(
@@ -84,7 +67,13 @@ function automating_the_ask_enqueue_scripts() {
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-ui-dialog');
             wp_enqueue_style('jquery-ui-dialog', plugins_url('css/jquery-ui.css', __FILE__));
-            wp_enqueue_script('automating-the-ask-scripts', plugins_url('js/automating-the-ask-scripts.js', __FILE__), array('jquery', 'jquery-ui-dialog'), '1.0', true);
+            wp_enqueue_script('automating-the-ask-scripts', plugins_url('js/index.js', __FILE__), array('jquery', 'jquery-ui-dialog'), '1.0', true);
+
+            // Localize script with data for JavaScript
+            wp_localize_script('automating-the-ask-scripts', 'groupFetcherData', [
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('fetch_group_nonce'), // create and add nonce here
+            ]);
 
             // Enqueue Custom CSS
             wp_enqueue_style('the19th-custom', plugins_url('css/the19th-custom.css', __FILE__));
