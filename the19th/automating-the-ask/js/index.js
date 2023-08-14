@@ -18,7 +18,7 @@ function checkGroupIsValid(group) {
  */
 async function getSnowplowUserId() {
   var cookiePattern =
-    /_sp_id\.[A-Za-z\d]+=([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})\./g;
+    /_sp_id\.[A-Za-z\d]+=([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})\./;
 
   var delay = function (ms) {
     return new Promise((_) => setTimeout(_, ms));
@@ -29,17 +29,18 @@ async function getSnowplowUserId() {
   var ITERATIONS = WAIT_MS / DELAY_MS;
 
   for (var i = 0; i < ITERATIONS; i++) {
-    var matches = cookiePattern.exec(document.cookie);
+    var matches = cookiePattern.exec(document.cookie) || [];
+    var userId = matches[1];
 
     // If no matches, try again after DELAY_MS ms
-    if (matches === null || matches[1] === undefined) {
+    if (userId === undefined) {
       console.log(i);
       await delay(DELAY_MS);
       continue;
     }
 
-    console.log(`Found Snowplow UserID after ${i * DELAY_MS}ms`);
-    return matches[1];
+    console.log(`Found Snowplow User ID ${userId} after ${i * DELAY_MS}ms`);
+    return userId;
   }
 
   console.warn(
