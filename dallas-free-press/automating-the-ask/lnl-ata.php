@@ -20,12 +20,12 @@ function fetch_group() {
     }
 
     $userId = sanitize_text_field($_POST['userId']);
-    $url = "https://ata-api.localnewslab.io/prescription/the-19th/$userId";
+    $url = "https://ata-api.localnewslab.io/prescription/dallas-free-press/$userId";
     $headers = [
         'x-api-key' => LNL_ATA_API_KEY
     ];
 
-    $response = vip_safe_wp_remote_get($url, ['headers' => $headers]);
+    $response = wp_remote_get($url, ['headers' => $headers]);
 
 	if (is_wp_error($response)) {
     		wp_send_json_error(['error' => $response->get_error_message()]);
@@ -42,21 +42,17 @@ add_action('wp_ajax_nopriv_fetch_group', 'fetch_group');
 
 // Enqueue HTML Editor 
 function enqueue_my_script() {
-    if (is_callable('jetpack_is_mobile')) {
-       if (jetpack_is_mobile()) {
+
             wp_enqueue_script('my-script', '/wp-content/plugins/automating-the-ask-shortcode/script.js', array('jquery'), '1.0', true);
             wp_localize_script('my-script', 'myScriptData', array(
                 'shortcodeContent' => do_shortcode('[ata_shortcode]')
             ));
-        }
-    }
+
 }
 add_action('wp_enqueue_scripts', 'enqueue_my_script');
 
 // Enqueue CSS and JavaScript
 function automating_the_ask_enqueue_scripts() {
-    if (is_callable('jetpack_is_mobile')) {
-        if (jetpack_is_mobile()) {
             // Enqueue scripts and stylesheets
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-ui-dialog');
@@ -70,9 +66,7 @@ function automating_the_ask_enqueue_scripts() {
             ]);
 
             // Enqueue Custom CSS
-            wp_enqueue_style('the19th-custom', plugins_url('css/the19th-custom.css', __FILE__));
-        }
-    }
+            wp_enqueue_style('dfp-custom', plugins_url('css/dfp-custom.css', __FILE__));
 }
 add_action('wp_enqueue_scripts', 'automating_the_ask_enqueue_scripts');
 
