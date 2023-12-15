@@ -16,18 +16,32 @@ function checkGroupIsValid(group) {
 /**
  * Gets Snowplow user ID from cookie set by Snowplow
  */
-function getSnowplowUserId() {
-  var cookiePrefix = "_sp_id.";
-  var cookies = document.cookie.split(";");
+async function getSnowplowUserId() {
+  var cookiePattern =
+    /_sp_id\.[A-Za-z\d]+=([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})\./;
 
-  for (var cookie of cookies) {
-    cookie = cookie.trim();
-    if (cookie.indexOf(cookiePrefix) === 0) {
-      var userId = cookie.substring(cookiePrefix.length + 5, cookie.length);
-      console.log("User ID:", userId);
-      // localStorage.setItem("SnowplowUserId", userId);  // if we need to
-      return userId;
+  var delay = function (ms) {
+    return new Promise((_) => setTimeout(_, ms));
+console.log(cookiePattern);
+  };
+
+  var DELAY_MS = 250;
+  var WAIT_MS = 30000;
+  var ITERATIONS = WAIT_MS / DELAY_MS;
+
+  for (var i = 0; i < ITERATIONS; i++) {
+    var matches = cookiePattern.exec(document.cookie) || [];
+    var userId = matches[1];
+
+    // If no matches, try again after DELAY_MS ms
+    if (userId === undefined) {
+      console.log(i);
+      await delay(DELAY_MS);
+      continue;
     }
+
+    console.log(`Found Snowplow User ID ${userId} after ${i * DELAY_MS}ms`);
+    return userId;
   }
 
   console.warn(
@@ -163,7 +177,7 @@ function displayModal() {
 }
 
 // MAIN SCRIPT
-jQuery(document).ready(function ($) {
+jQuery(document).ready(async function ($) {
   var group = getGroupFromLocalStorage();
 
   // If there's already a group (i.e., subsequent visits)
@@ -173,7 +187,7 @@ jQuery(document).ready(function ($) {
   }
 
   // If there's not yet a group (i.e., first visit)
-  var userId = getSnowplowUserId();
+  var userId = await getSnowplowUserId();
 
   // Get group assignment from server, then put into LocalStorage
   $.ajax({
