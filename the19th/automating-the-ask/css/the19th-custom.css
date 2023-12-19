@@ -15,3 +15,19 @@ button.ui-dialog-titlebar-close {display: none;}
 #group-b .mobile-newsletter-cta,
 .newsletter-disabled .mobile-newsletter-cta
 {display:none!important}
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.modal-dialog-class {max-width: 100%!important;z-index: 99;}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+.newsletter .modal {display:none;}
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+.newsletter .modal {display:none;}
+}
+@media only screen and (min-device-width: 712px) and (max-device-width: 1138px) and (orientation: portrait) {
+.newsletter .modal {display:none;}
+}
+@media only screen and (min-device-width: 712px) and (max-device-width: 1138px) and (orientation: landscape) {
+.newsletter .modal {display:none;}
+}
+@media only screen and (min-width: 1024px) {
+.newsletter .modal {display:none;}
+}
