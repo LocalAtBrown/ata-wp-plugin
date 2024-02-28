@@ -22,7 +22,9 @@ button.ui-dialog-titlebar-close {display: none;}
 .none {display:none;}
 #group-a .mobile-newsletter-cta,
 #group-b .mobile-newsletter-cta,
-.newsletter-disabled .mobile-newsletter-cta
+.newsletter-disabled .mobile-newsletter-cta,
+#group-a .newspack-inline-popup.newspack-lightbox-no-border,
+#group-b .newspack-inline-popup.newspack-lightbox-no-border 
 {display:none!important}
 .newsletter .modal p {color: rgb(51, 51, 51);font-size: .75em;line-height: 1.1;margin-bottom: 0;font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;}
 .ui-dialog .ui-dialog-titlebar.ui-widget-header {border:none!important; background:none!important;}
