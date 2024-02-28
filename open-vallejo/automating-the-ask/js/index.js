@@ -53,18 +53,18 @@ console.log(cookiePattern);
  */
 function executeGroupLogic(group) {
   document.body.id = "group-" + group.toLowerCase();
+  
+  var modalShownInSession = sessionStorage.getItem("modalShownInSession");  
 
-  if (localStorage.getItem("modalDisabled") === "disabled") {
+  if (localStorage.getItem("modalDisabled") === "disabled" || sessionStorage.getItem("modalShownInSession") === "true") {
     var body = document.querySelector("body");
     body.classList.add("newsletter-disabled");
   }
-  if (group === "A" && localStorage.getItem("modalDisabled") !== "disabled") {
+  if (group === "A" && localStorage.getItem("modalDisabled") !== "disabled" && modalShownInSession !== "true") {
+    displayModal();
     localStorage.setItem("modalShown", "true");
-    setTimeout(function() {
-    	displayModal();
- 	}, 5000);
   }
-  if (group === "B" && localStorage.getItem("modalDisabled") !== "disabled") {
+  if (group === "B" && localStorage.getItem("modalDisabled") !== "disabled" && modalShownInSession !== "true") {
     function getScrollDepth() {
       var scrollHeight = document.documentElement.scrollHeight;
       var clientHeight = document.documentElement.clientHeight;
@@ -82,7 +82,7 @@ function executeGroupLogic(group) {
       console.log("Scroll depth:", depth + "%");
       var actionPerformed = false;
 
-      if (depth >= 30 && localStorage.getItem("modalDisabled") !== "disabled") {
+      if (depth >= 30 && localStorage.getItem("modalDisabled") !== "disabled" && modalShownInSession !== "true") {
         console.log("Scroll depth is 30% or greater. Performing action...");
         actionPerformed = true;
         window.removeEventListener("scroll", scrollHandler);
@@ -150,7 +150,7 @@ function displayModal() {
   disableButton.addEventListener("click", function () {
     localStorage.setItem("modalDisabled", "disabled");
   });
-  if (window.location.href.includes('/newsletter')) {
+  if (window.location.href.includes('/newsletter') || document.querySelector('.category-obituaries')) {
     modal.dialog("destroy").remove();
   }	
 }
@@ -161,6 +161,7 @@ jQuery(document).ready(async function ($) {
   // If there's already a group (i.e., subsequent visits)
   if (checkGroupIsValid(group)) {
     executeGroupLogic(group);
+    sessionStorage.setItem("modalShownInSession", "true");
     return;
   }
 
